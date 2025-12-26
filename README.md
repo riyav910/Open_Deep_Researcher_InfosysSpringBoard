@@ -4,7 +4,7 @@ Follow these steps to get the researcher running with the default configuration.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/amalsalilan/B3-OpenDeepResearcher-Agentic-LLM-Research-Framework-.git
+   git clone https://github.com/riyav910/Open_Deep_Researcher_InfosysSpringBoard
    ```
 2. Change into the project directory:
    ```bash
