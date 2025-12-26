@@ -6,10 +6,8 @@ Follow these steps to get the researcher running with the default configuration.
    ```bash
    git clone https://github.com/riyav910/Open_Deep_Researcher_InfosysSpringBoard
    ```
-2. Change into the project directory:
-   ```bash
-   cd B3-OpenDeepResearcher-Agentic-LLM-Research-Framework
-   ```
+2. Go to the project directory
+  
 3. Install Python dependencies with `uv` (installation guide: https://docs.astral.sh/uv/getting-started/installation/):
    ```bash
    uv sync
