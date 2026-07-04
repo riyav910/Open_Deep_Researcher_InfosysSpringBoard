@@ -159,7 +159,18 @@ export const StreamProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   // Determine final values to use, prioritizing URL params then env vars
-  const finalApiUrl = apiUrl || envApiUrl;
+  const finalApiUrl =
+      apiUrl ||
+      envApiUrl ||
+      "https://open-deep-researcher-git-main-riya-vermas-projects-f7159b58.vercel.app/api";
+    
+    console.log({
+      apiUrl,
+      envApiUrl,
+      finalApiUrl,
+      assistantId,
+      envAssistantId,
+    });
   const finalAssistantId = assistantId || envAssistantId;
 
   // Show the form if we: don't have an API URL, or don't have an assistant ID
