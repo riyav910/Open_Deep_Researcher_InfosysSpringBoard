@@ -26,4 +26,4 @@ USER app
 
 EXPOSE 2024
 
-CMD ["langgraph", "dev", "--host", "0.0.0.0", "--port", "2024", "--allow-blocking"]
+CMD ["sh", "-c", "langgraph dev --host 0.0.0.0 --port ${PORT:-2024} --allow-blocking"]
