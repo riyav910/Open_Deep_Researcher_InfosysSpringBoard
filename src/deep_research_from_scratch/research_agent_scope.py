@@ -31,7 +31,7 @@ def get_today_str() -> str:
 # Initialize model - Primary: Google Gemini | Alternatives: "openai:gpt-4.1", "anthropic:claude-sonnet-4-20250514"
 
 model = init_chat_model(
-    model="gemini-3.1-flash-lite",
+    model="gemini-3.5-flash",
     model_provider="google_genai",
     temperature=0.0
 )
@@ -45,16 +45,48 @@ def clarify_with_user(state: AgentState) -> Command[Literal["write_research_brie
     Uses structured output to make deterministic decisions and avoid hallucination.
     Routes to either research brief generation or ends with a clarification question.
     """
+    import json
     # Set up structured output model
     structured_output_model = model.with_structured_output(ClarifyWithUser)
 
+    prompt_content = clarify_with_user_instructions.format(
+        messages=get_buffer_string(messages=state["messages"]), 
+        date=get_today_str()
+    )
+
     # Invoke the model with clarification instructions
-    response = structured_output_model.invoke([
-        HumanMessage(content=clarify_with_user_instructions.format(
-            messages=get_buffer_string(messages=state["messages"]), 
-            date=get_today_str()
-        ))
-    ])
+    try:
+        response = structured_output_model.invoke([
+            HumanMessage(content=prompt_content)
+        ])
+    except Exception:
+        response = None
+
+    # Fallback to manual JSON parsing if Pydantic parsing fails/returns None
+    if response is None:
+        try:
+            raw_response = model.invoke([
+                HumanMessage(content=prompt_content)
+            ])
+            content = raw_response.content
+            if "{" in content:
+                json_str = content[content.find("{"):content.rfind("}")+1]
+                data = json.loads(json_str)
+                response = ClarifyWithUser(
+                    need_clarification=data.get("need_clarification", True),
+                    question=data.get("question", "Could you please clarify your request?"),
+                    verification=data.get("verification", "")
+                )
+        except Exception:
+            pass
+
+    # Ultimate safe fallback
+    if response is None:
+        response = ClarifyWithUser(
+            need_clarification=True,
+            question="Could you please provide more details about your research request?",
+            verification=""
+        )
 
     # Route based on clarification need
     if response.need_clarification:
@@ -75,16 +107,44 @@ def write_research_brief(state: AgentState):
     Uses structured output to ensure the brief follows the required format
     and contains all necessary details for effective research.
     """
+    import json
     # Set up structured output model
     structured_output_model = model.with_structured_output(ResearchQuestion)
 
+    prompt_content = transform_messages_into_research_topic_prompt.format(
+        messages=get_buffer_string(state.get("messages", [])),
+        date=get_today_str()
+    )
+
     # Generate research brief from conversation history
-    response = structured_output_model.invoke([
-        HumanMessage(content=transform_messages_into_research_topic_prompt.format(
-            messages=get_buffer_string(state.get("messages", [])),
-            date=get_today_str()
-        ))
-    ])
+    try:
+        response = structured_output_model.invoke([
+            HumanMessage(content=prompt_content)
+        ])
+    except Exception:
+        response = None
+
+    # Fallback to manual JSON parsing if Pydantic parsing fails/returns None
+    if response is None:
+        try:
+            raw_response = model.invoke([
+                HumanMessage(content=prompt_content)
+            ])
+            content = raw_response.content
+            if "{" in content:
+                json_str = content[content.find("{"):content.rfind("}")+1]
+                data = json.loads(json_str)
+                response = ResearchQuestion(
+                    research_brief=data.get("research_brief", "Research on requested topic")
+                )
+        except Exception:
+            pass
+
+    # Ultimate safe fallback
+    if response is None:
+        response = ResearchQuestion(
+            research_brief="Research on requested topic"
+        )
 
     # Update state with generated research brief and pass it to the supervisor
     return {

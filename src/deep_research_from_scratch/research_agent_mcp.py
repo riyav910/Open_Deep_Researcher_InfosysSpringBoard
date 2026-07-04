@@ -64,9 +64,9 @@ def get_mcp_client():
 
 # Initialize models - Primary: Google Gemini | Alternatives: OpenAI, Anthropic
 # compress_model = init_chat_model(model="gemini-2.5-pro", model_provider="google_genai", temperature=0.0, max_tokens=32000)  # Alternatives: "openai:gpt-4.1", "anthropic:claude-sonnet-4-20250514"
-compress_model = init_chat_model(model="gemini-3.1-flash-lite", model_provider="google_genai", temperature=0.0, max_tokens=32000)  # Alternatives: "openai:gpt-4.1", "anthropic:claude-sonnet-4-20250514"
+compress_model = init_chat_model(model="gemini-3.5-flash", model_provider="google_genai", temperature=0.0, max_tokens=32000)  # Alternatives: "openai:gpt-4.1", "anthropic:claude-sonnet-4-20250514"
 # model = init_chat_model(model="gemini-2.5-pro", model_provider="google_genai", temperature=0.0)  # Alternatives: "openai:gpt-4.1", "anthropic:claude-sonnet-4-20250514"
-model = init_chat_model(model="gemini-3.1-flash-lite", model_provider="google_genai", temperature=0.0)  # Alternatives: "openai:gpt-4.1", "anthropic:claude-sonnet-4-20250514"
+model = init_chat_model(model="gemini-3.5-flash", model_provider="google_genai", temperature=0.0)  # Alternatives: "openai:gpt-4.1", "anthropic:claude-sonnet-4-20250514"
 
 # ===== AGENT NODES =====
 
