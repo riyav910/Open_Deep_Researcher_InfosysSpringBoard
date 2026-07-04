@@ -103,6 +103,28 @@ const StreamSession = ({
   });
 
   useEffect(() => {
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      const reason = event.reason;
+      if (
+        reason &&
+        (String(reason).includes("HTTP 404") ||
+          String(reason).includes("not found") ||
+          String(reason).includes("Thread with ID"))
+      ) {
+        console.warn("Caught unhandled 404 thread error. Clearing threadId...", reason);
+        setThreadId(null);
+        toast.error("The previous conversation thread was not found on this database. Started a new chat.");
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
+    return () => {
+      window.removeEventListener("unhandledrejection", handleUnhandledRejection);
+    };
+  }, [setThreadId]);
+
+  useEffect(() => {
     checkGraphStatus(apiUrl, apiKey).then((ok) => {
       if (!ok) {
         toast.error("Failed to connect to LangGraph server", {

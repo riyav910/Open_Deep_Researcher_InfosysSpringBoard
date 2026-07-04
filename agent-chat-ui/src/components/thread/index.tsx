@@ -259,7 +259,7 @@ export function Thread() {
     <div className="flex h-screen w-full overflow-hidden">
       <div className="relative hidden lg:flex">
         <motion.div
-          className="absolute z-20 h-full overflow-hidden border-r bg-white"
+          className="absolute z-20 h-full overflow-hidden border-r bg-sidebar"
           style={{ width: 300 }}
           animate={
             isLargeScreen
@@ -433,7 +433,7 @@ export function Thread() {
                 </>
               }
               footer={
-                <div className="sticky bottom-0 flex flex-col items-center gap-8 bg-white">
+                <div className="sticky bottom-0 flex flex-col items-center gap-8 bg-background">
                   {!chatStarted && (
                     <div className="flex items-center gap-3">
                       <LangGraphLogoSVG className="h-8 flex-shrink-0" />
@@ -493,7 +493,7 @@ export function Thread() {
                             />
                             <Label
                               htmlFor="render-tool-calls"
-                              className="text-sm text-gray-600"
+                              className="text-sm text-muted-foreground"
                             >
                               Hide Tool Calls
                             </Label>
@@ -503,8 +503,8 @@ export function Thread() {
                           htmlFor="file-input"
                           className="flex cursor-pointer items-center gap-2"
                         >
-                          <Plus className="size-5 text-gray-600" />
-                          <span className="text-sm text-gray-600">
+                          <Plus className="size-5 text-muted-foreground" />
+                          <span className="text-sm text-muted-foreground">
                             Upload PDF or Image
                           </span>
                         </Label>
