@@ -50,9 +50,13 @@ async def final_report_generation(state: AgentState):
 
     final_report = await writer_model.ainvoke([HumanMessage(content=final_report_prompt)])
 
+    report_text = final_report.content
+    if isinstance(report_text, list):
+        report_text = "".join([part if isinstance(part, str) else part.get("text", "") for part in report_text])
+
     return {
-        "final_report": final_report.content, 
-        "messages": ["Here is the final report: " + final_report.content],
+        "final_report": report_text, 
+        "messages": ["Here is the final report: " + report_text],
     }
 
 # ===== GRAPH CONSTRUCTION =====

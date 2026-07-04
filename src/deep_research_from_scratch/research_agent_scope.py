@@ -69,7 +69,9 @@ def clarify_with_user(state: AgentState) -> Command[Literal["write_research_brie
                 HumanMessage(content=prompt_content)
             ])
             content = raw_response.content
-            if "{" in content:
+            if isinstance(content, list):
+                content = "".join([part if isinstance(part, str) else part.get("text", "") for part in content])
+            if isinstance(content, str) and "{" in content:
                 json_str = content[content.find("{"):content.rfind("}")+1]
                 data = json.loads(json_str)
                 response = ClarifyWithUser(
@@ -131,7 +133,9 @@ def write_research_brief(state: AgentState):
                 HumanMessage(content=prompt_content)
             ])
             content = raw_response.content
-            if "{" in content:
+            if isinstance(content, list):
+                content = "".join([part if isinstance(part, str) else part.get("text", "") for part in content])
+            if isinstance(content, str) and "{" in content:
                 json_str = content[content.find("{"):content.rfind("}")+1]
                 data = json.loads(json_str)
                 response = ResearchQuestion(

@@ -49,7 +49,15 @@ def get_notes_from_tool_calls(messages: list[BaseMessage]) -> list[str]:
     Returns:
         List of research note strings extracted from ToolMessage objects
     """
-    return [tool_msg.content for tool_msg in filter_messages(messages, include_types="tool")]
+    notes_list = []
+    for tool_msg in filter_messages(messages, include_types="tool"):
+        content = tool_msg.content
+        if isinstance(content, list):
+            content = "".join([part if isinstance(part, str) else part.get("text", "") for part in content])
+        elif not isinstance(content, str):
+            content = str(content)
+        notes_list.append(content)
+    return notes_list
 
 # Ensure async compatibility for Jupyter environments
 try:
