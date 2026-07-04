@@ -45,7 +45,12 @@ export function ThreadProvider({ children }: { children: ReactNode }) {
   });
 
   const fallbackUrl = typeof window !== "undefined" ? `${window.location.origin}/api` : "https://open-deep-researcher-git-main-riya-vermas-projects-f7159b58.vercel.app/api";
-  const finalApiUrl = apiUrl || fallbackUrl;
+  let finalApiUrl = apiUrl || fallbackUrl;
+  if (typeof window !== "undefined" && !finalApiUrl.startsWith("http://") && !finalApiUrl.startsWith("https://")) {
+    finalApiUrl = finalApiUrl.startsWith("/")
+      ? `${window.location.origin}${finalApiUrl}`
+      : `${window.location.origin}/${finalApiUrl}`;
+  }
   const finalAssistantId = assistantId;
 
   const [threads, setThreads] = useState<Thread[]>([]);
