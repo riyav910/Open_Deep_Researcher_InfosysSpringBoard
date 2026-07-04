@@ -74,7 +74,7 @@ def convert_path_for_mcp(path: Path) -> str:
 # ===== CONFIGURATION =====
 
 # Primary: Google Gemini | Alternatives: "openai:gpt-4.1-mini", "anthropic:claude-haiku-3-5-20241022"
-summarization_model = init_chat_model(model="gemini-2.5-pro", model_provider="google_genai", temperature=0.0)
+summarization_model = init_chat_model(model="gemini-3.1-flash-lite", model_provider="google_genai", temperature=0.0)
 tavily_client = TavilyClient()
 
 # ===== SEARCH FUNCTIONS =====

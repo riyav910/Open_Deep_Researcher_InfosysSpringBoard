@@ -24,10 +24,10 @@ tools_by_name = {tool.name: tool for tool in tools}
 
 # Initialize models - Primary: Google Gemini | Alternatives: OpenAI, Anthropic
 # model = init_chat_model(model="gemini-2.5-pro", model_provider="google_genai", temperature=0.0)  # Alternatives: "openai:gpt-4.1", "anthropic:claude-sonnet-4-20250514"
-model = init_chat_model(model="gemini-1.5-flash", model_provider="google_genai", temperature=0.0)  # Alternatives: "openai:gpt-4.1", "anthropic:claude-sonnet-4-20250514"
+model = init_chat_model(model="gemini-3.1-flash-lite", model_provider="google_genai", temperature=0.0)  # Alternatives: "openai:gpt-4.1", "anthropic:claude-sonnet-4-20250514"
 model_with_tools = model.bind_tools(tools)
-summarization_model = init_chat_model(model="gemini-1.5-flash", model_provider="google_genai", temperature=0.0)  # Alternatives: "openai:gpt-4.1-mini", "anthropic:claude-haiku-3-5-20241022"
-compress_model = init_chat_model(model="gemini-1.5-flash", model_provider="google_genai", temperature=0.0, max_tokens=32000)  # Alternatives: "openai:gpt-4.1", "anthropic:claude-sonnet-4-20250514"
+summarization_model = init_chat_model(model="gemini-3.1-flash-lite", model_provider="google_genai", temperature=0.0)  # Alternatives: "openai:gpt-4.1-mini", "anthropic:claude-haiku-3-5-20241022"
+compress_model = init_chat_model(model="gemini-3.1-flash-lite", model_provider="google_genai", temperature=0.0, max_tokens=32000)  # Alternatives: "openai:gpt-4.1", "anthropic:claude-sonnet-4-20250514"
 
 # ===== AGENT NODES =====
 
