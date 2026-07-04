@@ -159,10 +159,8 @@ export const StreamProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   // Determine final values to use, prioritizing URL params then env vars
-  const finalApiUrl =
-      apiUrl ||
-      envApiUrl ||
-      "https://open-deep-researcher-git-main-riya-vermas-projects-f7159b58.vercel.app/api";
+  const fallbackUrl = typeof window !== "undefined" ? `${window.location.origin}/api` : "https://open-deep-researcher-git-main-riya-vermas-projects-f7159b58.vercel.app/api";
+  const finalApiUrl = apiUrl || envApiUrl || fallbackUrl;
     
     console.log({
       apiUrl,
@@ -288,8 +286,8 @@ export const StreamProvider: React.FC<{ children: ReactNode }> = ({
   return (
     <StreamSession
       apiKey={apiKey}
-      apiUrl={apiUrl}
-      assistantId={assistantId}
+      apiUrl={finalApiUrl}
+      assistantId={finalAssistantId}
     >
       {children}
     </StreamSession>
