@@ -52,7 +52,17 @@ async def final_report_generation(state: AgentState):
 
     report_text = final_report.content
     if isinstance(report_text, list):
-        report_text = "".join([part if isinstance(part, str) else part.get("text", "") for part in report_text])
+        parts = []
+        for part in report_text:
+            if isinstance(part, str):
+                parts.append(part)
+            elif hasattr(part, "text"):
+                parts.append(part.text)
+            elif isinstance(part, dict) and "text" in part:
+                parts.append(part["text"])
+            elif hasattr(part, "get"):
+                parts.append(part.get("text", ""))
+        report_text = "".join(parts)
 
     return {
         "final_report": report_text, 

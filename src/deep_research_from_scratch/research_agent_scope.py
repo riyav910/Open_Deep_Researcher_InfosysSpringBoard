@@ -70,7 +70,17 @@ def clarify_with_user(state: AgentState) -> Command[Literal["write_research_brie
             ])
             content = raw_response.content
             if isinstance(content, list):
-                content = "".join([part if isinstance(part, str) else part.get("text", "") for part in content])
+                parts = []
+                for part in content:
+                    if isinstance(part, str):
+                        parts.append(part)
+                    elif hasattr(part, "text"):
+                        parts.append(part.text)
+                    elif isinstance(part, dict) and "text" in part:
+                        parts.append(part["text"])
+                    elif hasattr(part, "get"):
+                        parts.append(part.get("text", ""))
+                content = "".join(parts)
             if isinstance(content, str) and "{" in content:
                 json_str = content[content.find("{"):content.rfind("}")+1]
                 data = json.loads(json_str)
@@ -134,7 +144,17 @@ def write_research_brief(state: AgentState):
             ])
             content = raw_response.content
             if isinstance(content, list):
-                content = "".join([part if isinstance(part, str) else part.get("text", "") for part in content])
+                parts = []
+                for part in content:
+                    if isinstance(part, str):
+                        parts.append(part)
+                    elif hasattr(part, "text"):
+                        parts.append(part.text)
+                    elif isinstance(part, dict) and "text" in part:
+                        parts.append(part["text"])
+                    elif hasattr(part, "get"):
+                        parts.append(part.get("text", ""))
+                content = "".join(parts)
             if isinstance(content, str) and "{" in content:
                 json_str = content[content.find("{"):content.rfind("}")+1]
                 data = json.loads(json_str)

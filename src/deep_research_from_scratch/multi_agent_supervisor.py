@@ -53,7 +53,17 @@ def get_notes_from_tool_calls(messages: list[BaseMessage]) -> list[str]:
     for tool_msg in filter_messages(messages, include_types="tool"):
         content = tool_msg.content
         if isinstance(content, list):
-            content = "".join([part if isinstance(part, str) else part.get("text", "") for part in content])
+            parts = []
+            for part in content:
+                if isinstance(part, str):
+                    parts.append(part)
+                elif hasattr(part, "text"):
+                    parts.append(part.text)
+                elif isinstance(part, dict) and "text" in part:
+                    parts.append(part["text"])
+                elif hasattr(part, "get"):
+                    parts.append(part.get("text", ""))
+            content = "".join(parts)
         elif not isinstance(content, str):
             content = str(content)
         notes_list.append(content)
