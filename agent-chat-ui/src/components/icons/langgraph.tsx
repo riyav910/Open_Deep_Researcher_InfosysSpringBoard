@@ -1,5 +1,3 @@
-import { Compass } from "lucide-react";
-
 export function LangGraphLogoSVG({
   className,
   width,
@@ -10,10 +8,15 @@ export function LangGraphLogoSVG({
   className?: string;
 }) {
   return (
-    <Compass
-      className={`stroke-[1.8] text-primary ${className || ""}`}
-      width={width}
-      height={height}
+    <img
+      src="/logo.png"
+      alt="Research & Planning Logo"
+      className={className}
+      style={{
+        width: width ?? undefined,
+        height: height ?? undefined,
+        objectFit: "contain",
+      }}
     />
   );
 }

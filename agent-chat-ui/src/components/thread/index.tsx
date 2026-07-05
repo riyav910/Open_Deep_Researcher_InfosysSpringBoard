@@ -120,9 +120,9 @@ export function Thread() {
     "chatHistoryOpen",
     parseAsBoolean.withDefault(false),
   );
-  const [hideToolCalls, setHideToolCalls] = useQueryState(
-    "hideToolCalls",
-    parseAsBoolean.withDefault(false),
+  const [showToolCalls, setShowToolCalls] = useQueryState(
+    "showToolCalls",
+    parseAsBoolean.withDefault(true),
   );
   const [input, setInput] = useState("");
   const {
@@ -488,14 +488,14 @@ export function Thread() {
                           <div className="flex items-center space-x-2">
                             <Switch
                               id="render-tool-calls"
-                              checked={hideToolCalls ?? false}
-                              onCheckedChange={setHideToolCalls}
+                              checked={showToolCalls ?? true}
+                              onCheckedChange={setShowToolCalls}
                             />
                             <Label
                               htmlFor="render-tool-calls"
                               className="text-sm text-muted-foreground"
                             >
-                              Hide Tool Calls
+                              Show Tool Calls
                             </Label>
                           </div>
                         </div>

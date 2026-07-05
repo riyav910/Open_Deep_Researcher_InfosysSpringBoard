@@ -125,6 +125,40 @@ const StreamSession = ({
   }, [setThreadId]);
 
   useEffect(() => {
+    if (streamValue.messages && streamValue.messages.length > 0) {
+      console.log("%c=== [PROGRESS UPDATE] Thread Messages Changed ===", "color: #0ea5e9; font-weight: bold;");
+      console.log(`Total messages in thread: ${streamValue.messages.length}`);
+      streamValue.messages.forEach((msg, idx) => {
+        const type = msg.type;
+        const name = msg.name || "";
+        const toolCalls = (msg as any).tool_calls || [];
+        
+        console.groupCollapsed(`[Step ${idx + 1}] Type: ${type}${name ? ` (Name: ${name})` : ""}`);
+        console.log("Raw Message:", msg);
+        if (toolCalls.length > 0) {
+          console.log("%cTool Calls:", "color: #f59e0b; font-weight: bold;", toolCalls);
+        }
+        if (msg.content) {
+          const contentStr = typeof msg.content === "string" 
+            ? msg.content 
+            : JSON.stringify(msg.content);
+          console.log("Content:", contentStr);
+        }
+        console.groupEnd();
+      });
+      console.log("==================================================");
+    }
+  }, [streamValue.messages]);
+
+  useEffect(() => {
+    if (streamValue.isLoading) {
+      console.log("%c⚡ LangGraph Stream: Loading / executing agent nodes...", "color: #f59e0b; font-weight: bold;");
+    } else {
+      console.log("%c✅ LangGraph Stream: Finished execution / Idle", "color: #10b981; font-weight: bold;");
+    }
+  }, [streamValue.isLoading]);
+
+  useEffect(() => {
     checkGraphStatus(apiUrl, apiKey).then((ok) => {
       if (!ok) {
         toast.error("Failed to connect to LangGraph server", {
