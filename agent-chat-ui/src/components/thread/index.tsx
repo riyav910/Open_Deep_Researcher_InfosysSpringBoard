@@ -364,8 +364,8 @@ export function Thread() {
                     width={32}
                     height={32}
                   />
-                  <span className="text-xl font-semibold tracking-tight">
-                    Agent Chat
+                   <span className="text-xl font-semibold tracking-tight">
+                    Research & Planning
                   </span>
                 </motion.button>
               </div>
@@ -437,18 +437,18 @@ export function Thread() {
                   {!chatStarted && (
                     <div className="flex items-center gap-3">
                       <LangGraphLogoSVG className="h-8 flex-shrink-0" />
-                      <h1 className="text-2xl font-semibold tracking-tight">
-                        Agent Chat
+                       <h1 className="text-2xl font-semibold tracking-tight">
+                        Research & Planning
                       </h1>
                     </div>
                   )}
 
                   <ScrollToBottom className="animate-in fade-in-0 zoom-in-95 absolute bottom-full left-1/2 mb-4 -translate-x-1/2" />
 
-                  <div
+                   <div
                     ref={dropRef}
                     className={cn(
-                      "bg-muted relative z-10 mx-auto mb-8 w-full max-w-3xl rounded-2xl shadow-xs transition-all",
+                      "bg-muted relative z-10 mx-auto mb-2 w-full max-w-3xl rounded-2xl shadow-xs transition-all",
                       dragOver
                         ? "border-primary border-2 border-dotted"
                         : "border border-solid",
@@ -540,6 +540,9 @@ export function Thread() {
                       </div>
                     </form>
                   </div>
+                  <p className="text-xs text-muted-foreground/60 mb-6 text-center max-w-3xl animate-pulse">
+                    Note: Deep research queries execute multi-agent workflows and web searches, taking 1–2 minutes to answer. Please be patient.
+                  </p>
                 </div>
               }
             />
