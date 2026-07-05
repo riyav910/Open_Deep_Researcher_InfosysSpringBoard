@@ -31,7 +31,7 @@ def get_today_str() -> str:
 # Initialize model - Primary: Google Gemini | Alternatives: "openai:gpt-4.1", "anthropic:claude-sonnet-4-20250514"
 
 model = init_chat_model(
-    model="gemini-3.5-flash",
+    model="gemini-3.1-flash-lite",
     model_provider="google_genai",
     temperature=0.0
 )
@@ -94,9 +94,14 @@ def clarify_with_user(state: AgentState) -> Command[Literal["write_research_brie
 
     # Ultimate safe fallback
     if response is None:
+        import traceback
+        tb = traceback.format_exc()
+        # Clean up traceback to make it fit in standard string format
+        tb_clean = tb.replace('\n', ' | ').replace('"', "'")
+        error_msg = f"Could you please provide more details about your research request? (Diagnostic Error: {tb_clean[-200:]})"
         response = ClarifyWithUser(
             need_clarification=True,
-            question="Could you please provide more details about your research request?",
+            question=error_msg,
             verification=""
         )
 

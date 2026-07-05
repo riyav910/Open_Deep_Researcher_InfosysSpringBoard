@@ -126,35 +126,72 @@ const StreamSession = ({
 
   useEffect(() => {
     if (streamValue.messages && streamValue.messages.length > 0) {
-      console.log("%c=== [PROGRESS UPDATE] Thread Messages Changed ===", "color: #0ea5e9; font-weight: bold;");
-      console.log(`Total messages in thread: ${streamValue.messages.length}`);
+      console.log("%c=== 🟢 [LANGGRAPH EVENT] Thread Messages Updated ===", "color: #0ea5e9; font-weight: bold; font-size: 11px;");
+      console.log(`Current Message Count in Thread: ${streamValue.messages.length}`);
+      
       streamValue.messages.forEach((msg, idx) => {
         const type = msg.type;
         const name = msg.name || "";
         const toolCalls = (msg as any).tool_calls || [];
         
-        console.groupCollapsed(`[Step ${idx + 1}] Type: ${type}${name ? ` (Name: ${name})` : ""}`);
+        let textSummary = "";
+        if (msg.content) {
+          if (typeof msg.content === "string") {
+            textSummary = msg.content;
+          } else if (Array.isArray(msg.content)) {
+            textSummary = msg.content
+              .map(c => typeof c === "string" ? c : (c as any).text || JSON.stringify(c))
+              .join(" ");
+          } else {
+            textSummary = JSON.stringify(msg.content);
+          }
+        }
+        
+        // Clean summary for preview header
+        textSummary = textSummary.trim().replace(/\s+/g, ' ');
+        if (textSummary.length > 70) {
+          textSummary = textSummary.substring(0, 70) + "...";
+        }
+        
+        const headerText = `[Step ${idx + 1}] ${type.toUpperCase()}${name ? ` (${name})` : ""}${textSummary ? ` ➔ "${textSummary}"` : ""}`;
+        console.groupCollapsed(`%c${headerText}`, "color: #4b5563; font-weight: 500;");
         console.log("Raw Message:", msg);
         if (toolCalls.length > 0) {
-          console.log("%cTool Calls:", "color: #f59e0b; font-weight: bold;", toolCalls);
+          console.log("%cTool Calls Requested:", "color: #f59e0b; font-weight: bold;", toolCalls);
         }
         if (msg.content) {
-          const contentStr = typeof msg.content === "string" 
-            ? msg.content 
-            : JSON.stringify(msg.content);
-          console.log("Content:", contentStr);
+          console.log("Full Content Payload:", msg.content);
         }
         console.groupEnd();
       });
-      console.log("==================================================");
+      console.log("=========================================================");
     }
   }, [streamValue.messages]);
 
   useEffect(() => {
+    if (streamValue.values) {
+      console.log("%c=== 🔄 [LANGGRAPH STATE] State Variables Changed ===", "color: #a855f7; font-weight: bold; font-size: 11px;");
+      const filteredState: Record<string, any> = {};
+      const keysToTrack = ["research_brief", "final_report", "need_clarification", "question", "verification"];
+      keysToTrack.forEach(k => {
+        if (streamValue.values && k in streamValue.values) {
+          filteredState[k] = (streamValue.values as any)[k];
+        }
+      });
+      if (Object.keys(filteredState).length > 0) {
+        console.log("Tracked State Values:", filteredState);
+      } else {
+        console.log("Full State Dump:", streamValue.values);
+      }
+      console.log("=========================================================");
+    }
+  }, [streamValue.values]);
+
+  useEffect(() => {
     if (streamValue.isLoading) {
-      console.log("%c⚡ LangGraph Stream: Loading / executing agent nodes...", "color: #f59e0b; font-weight: bold;");
+      console.log("%c⚡ LangGraph Stream: Executing nodes and waiting for response...", "color: #f59e0b; font-weight: bold;");
     } else {
-      console.log("%c✅ LangGraph Stream: Finished execution / Idle", "color: #10b981; font-weight: bold;");
+      console.log("%c✅ LangGraph Stream: Execution completed, session idle.", "color: #10b981; font-weight: bold;");
     }
   }, [streamValue.isLoading]);
 
